@@ -3,7 +3,7 @@ using Xunit;
 
 namespace Exercises_Tests
 {
-    public class UnitTest1
+    public class E1_Tests
     {
         [Fact]
         public void SumMultiplesUntil10_23()
