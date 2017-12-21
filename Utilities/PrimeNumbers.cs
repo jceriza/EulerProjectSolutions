@@ -7,9 +7,7 @@ namespace Utilities
     {
         public static IEnumerable<long> PrimesGeneratorFrom2()
         {
-            yield return 2;
-
-            for (int i = 3; true; i += 2)
+            for (int i = 1; true; i++)
             {
                 if (IsPrimeNumber(i))
                 {
