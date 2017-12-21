@@ -2,7 +2,7 @@
 
 namespace Exercises
 {
-    public static class E3_Largest_prime_factor
+    public static class E003_Largest_prime_factor
     {
         public static long LargestPrimeFactor(long num)
         {

@@ -1,6 +1,6 @@
 ﻿namespace Exercises
 {
-    public static class E5_Smallest_Multiple
+    public static class E005_Smallest_Multiple
     {
         public static long SmallestMultiple(int multipleUntil)
         {

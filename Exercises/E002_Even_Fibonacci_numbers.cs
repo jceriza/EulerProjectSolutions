@@ -3,7 +3,7 @@ using Utilities;
 
 namespace Exercises
 {
-    public static class E2_Even_Fibonacci_numbers
+    public static class E002_Even_Fibonacci_numbers
     {
         public static long EvenSumNotExceeding4Million()
         {

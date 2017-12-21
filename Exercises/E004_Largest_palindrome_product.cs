@@ -4,7 +4,7 @@ using Utilities;
 
 namespace Exercises
 {
-    public static class E4_Largest_palindrome_product
+    public static class E004_Largest_palindrome_product
     {
         private static HashSet<(int, int)> _numbersUsed = new HashSet<(int, int)>();
 

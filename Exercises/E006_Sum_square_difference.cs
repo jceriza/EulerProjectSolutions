@@ -1,6 +1,6 @@
 ﻿namespace Exercises
 {
-    public static class E6_Sum_square_difference
+    public static class E006_Sum_square_difference
     {
         private static long SumSquares(long limit)
         {

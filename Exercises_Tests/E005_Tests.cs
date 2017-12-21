@@ -3,12 +3,12 @@ using Xunit;
 
 namespace Exercises_Tests
 {
-    public class E5_Tests
+    public class E005_Tests
     {
         [Fact]
         public void SmallestMultipleTo10_2520()
         {
-            var smallestMultiple = E5_Smallest_Multiple.SmallestMultiple(10);
+            var smallestMultiple = E005_Smallest_Multiple.SmallestMultiple(10);
 
             Assert.Equal(2520, smallestMultiple);
         }
@@ -16,7 +16,7 @@ namespace Exercises_Tests
         [Fact]
         public void SmallestMultipleTo20_232792560()
         {
-            var smallestMultiple = E5_Smallest_Multiple.SmallestMultiple(20);
+            var smallestMultiple = E005_Smallest_Multiple.SmallestMultiple(20);
 
             Assert.Equal(232792560, smallestMultiple);
         }

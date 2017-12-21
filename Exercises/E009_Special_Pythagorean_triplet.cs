@@ -2,7 +2,7 @@
 
 namespace Exercises
 {
-    public static class E9_Special_Pythagorean_triplet
+    public static class E009_Special_Pythagorean_triplet
     {
         public static int PythagoreanProduct(int desiredSum)
         {

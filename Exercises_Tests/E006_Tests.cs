@@ -3,12 +3,12 @@ using Xunit;
 
 namespace Exercises_Tests
 {
-    public class E6_Tests
+    public class E006_Tests
     {
         [Fact]
         public void SumSquareDifference_2640()
         {
-            var sum = E6_Sum_square_difference.SumSquareDifference(10);
+            var sum = E006_Sum_square_difference.SumSquareDifference(10);
 
             Assert.Equal(2640, sum);
         }
@@ -16,7 +16,7 @@ namespace Exercises_Tests
         [Fact]
         public void SumSquareDifference_25164150()
         {
-            var sum = E6_Sum_square_difference.SumSquareDifference(100);
+            var sum = E006_Sum_square_difference.SumSquareDifference(100);
 
             Assert.Equal(25164150, sum);
         }

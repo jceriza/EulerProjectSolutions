@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Exercises
 {
-    public static class E8_Largest_product_in_a_series
+    public static class E008_Largest_product_in_a_series
     {
         public static long LargestProductInASeries(string text, int adjacentDigits)
         {
