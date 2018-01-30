@@ -32,7 +32,7 @@ namespace Exercises_Tests
                 { 01, 70, 54, 71, 83, 51, 54, 69, 16, 92, 33, 48, 61, 43, 52, 01, 89, 19, 67, 48 }
             };
 
-            var largestProduct = E11_Largest_product_in_a_grid.LargestProductInASquaredGrid(grid, 4);
+            var largestProduct = E011_Largest_product_in_a_grid.LargestProductInASquaredGrid(grid, 4);
 
             Assert.Equal(70600674, largestProduct);
         }

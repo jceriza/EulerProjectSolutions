@@ -1,6 +1,6 @@
 ﻿namespace Exercises
 {
-    public static class E11_Largest_product_in_a_grid
+    public static class E011_Largest_product_in_a_grid
     {
         public static long LargestProductInASquaredGrid(int[,] grid, int nAdjacents)
         {
