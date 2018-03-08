@@ -6,7 +6,7 @@ namespace Exercises_Tests
     public class E011_Tests
     {
         [Fact]
-        public void LargestProductInAGrid_X()
+        public void LargestProductInAGrid_70600674()
         {
             var grid = new int[,]
             {

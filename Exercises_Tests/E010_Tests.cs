@@ -14,7 +14,7 @@ namespace Exercises_Tests
         }
 
         [Fact]
-        public void SumPrimesBelow2000000_X()
+        public void SumPrimesBelow2000000_142913828922()
         {
             var sum = E010_Summation_of_primes.SumPrimesBelowN(2_000_000);
 

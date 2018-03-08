@@ -14,7 +14,7 @@ namespace Exercises_Tests
         }
 
         [Fact]
-        public void PowerDigitSum_2Pow1000_X()
+        public void PowerDigitSum_2Pow1000_1366()
         {
             Assert.Equal(
                 1366,
