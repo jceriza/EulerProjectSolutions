@@ -59,5 +59,15 @@ namespace Utilities
 
             return accruedMultiplication;
         }
+
+        public static string Factorial(int number)
+        {
+            if (number == 1)
+            {
+                return "1";
+            }
+
+            return Multiplication(number.ToString(), Factorial(number - 1));
+        }
     }
 }
