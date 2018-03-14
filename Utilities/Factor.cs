@@ -9,6 +9,8 @@ namespace Utilities
 
         public static HashSet<long> GetFactors(long number)
         {
+            if (number == 0) return new HashSet<long>();
+
             if (factorsDictionary.ContainsKey(number)) return factorsDictionary[number];
 
             var factors = new HashSet<long>() { 1, number };
