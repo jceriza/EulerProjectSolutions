@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace Utilities
 {
-    public static class Factor
+    public static class Divisors
     {
         private static Dictionary<long, HashSet<long>> factorsDictionary = new Dictionary<long, HashSet<long>>();
 
-        public static HashSet<long> GetFactors(long number)
+        private static HashSet<long> GetAllDivisors(long number)
         {
             if (number == 0) return new HashSet<long>();
 
@@ -22,13 +22,28 @@ namespace Utilities
                 if (number % i == 0)
                 {
                     factors.Add(i);
-                    factors.UnionWith(GetFactors(number / i));
+                    factors.Add(number / i);
+                    factors.UnionWith(GetAllDivisors(number / i));
                 }
             }
 
             factorsDictionary.Add(number, factors);
 
             return factors;
+        }
+
+        public static HashSet<long> ProperDivisors(long number)
+        {
+            var factors = GetAllDivisors(number);
+
+            factors.Remove(number);
+
+            return factors;
+        }
+
+        public static HashSet<long> AllDivisors(long number)
+        {
+            return GetAllDivisors(number);
         }
     }
 }

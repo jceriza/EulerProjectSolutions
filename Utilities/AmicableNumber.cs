@@ -14,7 +14,7 @@ namespace Utilities
                 return _factorsCache[number];
             }
 
-            long sum = Factor.GetFactors(number).Where(n => n != number).Sum();
+            long sum = Divisors.ProperDivisors(number).Sum();
 
             _factorsCache.Add(number, sum);
 

@@ -8,7 +8,7 @@ namespace Exercises
         {
             foreach (var number in TriangleNumbers.Generator())
             {
-                if (Factor.GetFactors(number).Count > 500)
+                if (Divisors.AllDivisors(number).Count > 500)
                 {
                     return number;
                 }
