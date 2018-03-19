@@ -1,31 +1,38 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 
 namespace Utilities
 {
     public static class Fibonacci
     {
-        private static readonly Dictionary<int, long> _fibonacciValues
-            = new Dictionary<int, long> { { 1, 1 }, { 2, 2 } };
+        private static readonly ConcurrentDictionary<int, string> _fibonacciValues
+            = new ConcurrentDictionary<int, string>();
 
-        private static long NFibonacciNumber(int num)
+        static Fibonacci()
         {
-            if (_fibonacciValues.TryGetValue(num, out long value))
+            _fibonacciValues.TryAdd(1, "1");
+            _fibonacciValues.TryAdd(2, "1");
+        }
+
+        public static string NthFibonacciNumber(int num)
+        {
+            if (_fibonacciValues.TryGetValue(num, out string value))
             {
                 return value;
             }
 
-            value = NFibonacciNumber(num - 1) + NFibonacciNumber(num - 2);
+            value = LargeNumbersCalculations.Sum(NthFibonacciNumber(num - 1), NthFibonacciNumber(num - 2));
 
-            _fibonacciValues.Add(num, value);
+            _fibonacciValues.TryAdd(num, value);
 
             return value;
         }
 
-        public static IEnumerable<long> FibonacciGenerator()
+        public static IEnumerable<string> FibonacciGenerator()
         {
             for (int i = 1; true; i++)
             {
-                yield return NFibonacciNumber(i);
+                yield return NthFibonacciNumber(i);
             }
         }
     }
