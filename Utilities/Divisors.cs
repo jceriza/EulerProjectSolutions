@@ -1,17 +1,18 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace Utilities
 {
     public static class Divisors
     {
-        private static Dictionary<long, HashSet<long>> factorsDictionary = new Dictionary<long, HashSet<long>>();
+        private static ConcurrentDictionary<long, HashSet<long>> _factorsDictionary = new ConcurrentDictionary<long, HashSet<long>>();
 
         private static HashSet<long> GetAllDivisors(long number)
         {
             if (number == 0) return new HashSet<long>();
 
-            if (factorsDictionary.ContainsKey(number)) return factorsDictionary[number];
+            if (_factorsDictionary.ContainsKey(number)) return _factorsDictionary[number];
 
             var factors = new HashSet<long>() { 1, number };
 
@@ -27,7 +28,7 @@ namespace Utilities
                 }
             }
 
-            factorsDictionary.Add(number, factors);
+            _factorsDictionary.TryAdd(number, factors);
 
             return factors;
         }
