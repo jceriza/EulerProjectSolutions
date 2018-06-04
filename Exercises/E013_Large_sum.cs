@@ -1,4 +1,5 @@
-﻿using Utilities;
+﻿using System.Linq;
+using Utilities;
 
 namespace Exercises
 {
@@ -6,15 +7,20 @@ namespace Exercises
     {
         public static string FirstTenDigitsOf50NumbersSum(string numbers)
         {
-            var numbersList = numbers.Replace("\r", "").Split('\n');
+            var numbersList = numbers
+                .Replace("\r", "")
+                .Split('\n')
+                .Select(n => new LargeNumber(n))
+                .ToList();
+
             var totalSum = numbersList[0];
 
-            for (int i = 1; i < numbersList.Length; i++)
+            for (int i = 1; i < numbersList.Count; i++)
             {
-                totalSum = LargeNumbersCalculations.Sum(totalSum, numbersList[i]);
+                totalSum += numbersList[i];
             }
 
-            return totalSum.Substring(0, 10);
+            return totalSum.ToString().Substring(0, 10);
         }
     }
 }

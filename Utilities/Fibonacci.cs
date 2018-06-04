@@ -5,30 +5,30 @@ namespace Utilities
 {
     public static class Fibonacci
     {
-        private static readonly ConcurrentDictionary<int, string> _fibonacciValues
-            = new ConcurrentDictionary<int, string>();
+        private static readonly ConcurrentDictionary<int, LargeNumber> _fibonacciValues
+            = new ConcurrentDictionary<int, LargeNumber>();
 
         static Fibonacci()
         {
-            _fibonacciValues.TryAdd(1, "1");
-            _fibonacciValues.TryAdd(2, "1");
+            _fibonacciValues.TryAdd(1, new LargeNumber(1));
+            _fibonacciValues.TryAdd(2, new LargeNumber(1));
         }
 
-        public static string NthFibonacciNumber(int num)
+        public static LargeNumber NthFibonacciNumber(int num)
         {
-            if (_fibonacciValues.TryGetValue(num, out string value))
+            if (_fibonacciValues.TryGetValue(num, out LargeNumber value))
             {
                 return value;
             }
 
-            value = LargeNumbersCalculations.Sum(NthFibonacciNumber(num - 1), NthFibonacciNumber(num - 2));
+            value = NthFibonacciNumber(num - 1) + NthFibonacciNumber(num - 2);
 
             _fibonacciValues.TryAdd(num, value);
 
             return value;
         }
 
-        public static IEnumerable<string> FibonacciGenerator()
+        public static IEnumerable<LargeNumber> FibonacciGenerator()
         {
             for (int i = 1; true; i++)
             {

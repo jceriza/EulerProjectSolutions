@@ -33,18 +33,16 @@ namespace Exercises
 
         public static long PowerOf2(int power)
         {
-            var pow = "1";
+            var pow = new LargeNumber("1");
 
             for (; power > 0; power -= 50)
             {
                 var currentPower = power % 50 == 0 ? PowerOf50 : GetPowerOfN(power);
 
-                pow = LargeNumbersCalculations.Multiplication(
-                    pow,
-                    currentPower.ToString());
+                pow *= new LargeNumber(currentPower.ToString());
             }
 
-            return DigitsSum(pow);
+            return DigitsSum(pow.ToString());
         }
     }
 }

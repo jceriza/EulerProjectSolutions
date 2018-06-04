@@ -8,14 +8,14 @@ namespace Exercises
         public static long EvenSumNotExceeding4Million()
         {
             int i = 1;
-            long value = long.Parse(Fibonacci.FibonacciGenerator().First());
+            long value = long.Parse(Fibonacci.FibonacciGenerator().First().ToString());
             long sum = 0;
 
             while (value <= 4000000)
             {
                 if (value % 2 == 0) sum += value;
 
-                value = long.Parse(Fibonacci.FibonacciGenerator().Skip(i++).First());
+                value = long.Parse(Fibonacci.FibonacciGenerator().Skip(i++).First().ToString());
             }
 
             return sum;

@@ -7,7 +7,7 @@ namespace Exercises
         public static int IndexOf1000DigitFibonacciNumber()
         {
             var i = 1;
-            for (; Fibonacci.NthFibonacciNumber(i).Length < 1000; i++) ;
+            for (; Fibonacci.NthFibonacciNumber(i).ToString().Length < 1000; i++) ;
 
             return i;
         }

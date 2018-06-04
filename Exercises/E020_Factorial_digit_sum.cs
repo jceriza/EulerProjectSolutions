@@ -7,8 +7,9 @@ namespace Exercises
     {
         public static int SumOfDigitsOfNumber(int num)
         {
-            return LargeNumbersCalculations
+            return LargeNumber
                 .Factorial(num)
+                .ToString()
                 .Select(a => int.Parse(a.ToString()))
                 .Sum();
         } 
