@@ -33,6 +33,24 @@ namespace Utilities
             return factors;
         }
 
+        public static (long numerator, long denominator) LowestCommonTerms(long numerator, long denominator)
+        {
+            var commonDivisors = Divisors.AllDivisors(numerator);
+            commonDivisors.IntersectWith(Divisors.AllDivisors(denominator));
+            commonDivisors.Remove(1);
+
+            foreach (var divisor in commonDivisors)
+            {
+                if (numerator % divisor == 0 && denominator % divisor == 0)
+                {
+                    numerator /= divisor;
+                    denominator /= divisor;
+                }
+            }
+
+            return (numerator, denominator);
+        }
+
         public static HashSet<long> ProperDivisors(long number)
         {
             var factors = GetAllDivisors(number);
