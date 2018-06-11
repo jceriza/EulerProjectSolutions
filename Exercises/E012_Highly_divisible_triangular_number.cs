@@ -1,4 +1,5 @@
-﻿using Utilities;
+﻿using System.Linq;
+using Utilities;
 
 namespace Exercises
 {
@@ -6,7 +7,9 @@ namespace Exercises
     {
         public static long FirstTriangleNumberWithOverFiveHundredDivisors()
         {
-            foreach (var number in TriangleNumbers.Generator())
+            var threshold = 500 * 500 - 1;
+
+            foreach (var number in TriangleNumbers.Generator().SkipWhile(t => t < threshold))
             {
                 if (Divisors.AllDivisors(number).Count > 500)
                 {

@@ -1,36 +1,60 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 
 namespace Utilities
 {
-    public struct LargeNumber : IEquatable<LargeNumber>
+    public struct LargeNumber : IEquatable<LargeNumber>, IComparable<LargeNumber>
     {
-        private readonly string _number;
+        private const int _chunkSize = 9;
+        private readonly ReadOnlyCollection<long> _chunks;
 
         public LargeNumber(long number)
         {
-            _number = number.ToString();
+            _chunks = NumberInChunks(number.ToString()).ToList().AsReadOnly();
         }
 
         public LargeNumber(string number)
         {
-            _number = number;
+            _chunks = NumberInChunks(number).ToList().AsReadOnly();
+        }
+
+        private LargeNumber(List<long> chunks)
+        {
+            _chunks = chunks.AsReadOnly();
+        }
+
+        private static IEnumerable<long> NumberInChunks(string number)
+        {
+            for (int i = number.Length - _chunkSize; i >= 0; i -= _chunkSize)
+            {
+                yield return long.Parse(number.Substring(i, _chunkSize));
+            }
+
+            var remaining = number.Length % _chunkSize;
+
+            if (remaining > 0)
+            {
+                yield return long.Parse(number.Substring(0, remaining));
+            }
         }
 
         public static bool operator ==(LargeNumber one, LargeNumber other)
         {
-            return one._number == other._number;
+            return one.Equals(other);
         }
 
         public static bool operator !=(LargeNumber one, LargeNumber other)
         {
-            return !(one == other);
+            return !(one.Equals(other));
         }
 
         public bool Equals(LargeNumber other)
         {
-            return this == other;
+            return CompareTo(other) == 1;
         }
 
         public override bool Equals(object obj)
@@ -45,73 +69,103 @@ namespace Utilities
 
         public override int GetHashCode()
         {
-            return _number.GetHashCode();
+            return _chunks.ToString().GetHashCode();
         }
 
-        private static string Sum(string left, string right)
+        public int CompareTo(LargeNumber other)
         {
-            var sum = new StringBuilder();
-            var carriage = 0;
-            var longest = left.Length > right.Length ? left : right;
-            var shortest = left.Length <= right.Length ? left : right;
-
-            for (int i = longest.Length - 1, j = shortest.Length - 1; i >= 0; i--, j--)
+            if (_chunks.Count != other._chunks.Count)
             {
-                var firstCharacter = int.Parse(longest[i].ToString());
-                var secondCharacter = j >= 0 ? int.Parse(shortest[j].ToString()) : 0;
-
-                var currentSum = firstCharacter + secondCharacter + carriage;
-
-                if (currentSum > 9) carriage = currentSum / 10;
-                else carriage = 0;
-
-                sum.Insert(0, currentSum % 10);
+                return _chunks.Count.CompareTo(other._chunks.Count);
             }
 
-            if (carriage > 0) sum.Insert(0, carriage);
+            var differentChunks = _chunks
+                .SkipWhile((chunk, index) => chunk == other._chunks[index])
+                .Select((chunk, index) => (chunk, otherChunk: other._chunks[index]));
 
-            return sum.ToString();
+            if (differentChunks.Any())
+            {
+                var (chunk, otherChunk) = differentChunks.First();
+
+                return chunk.CompareTo(otherChunk);
+            }
+
+            return 1;
+        }
+
+        public static bool operator < (LargeNumber left, LargeNumber right)
+        {
+            return left.CompareTo(right) < 0;
+        }
+
+        public static bool operator >(LargeNumber left, LargeNumber right)
+        {
+            return left.CompareTo(right) > 0;
+        }
+
+        public static bool operator <=(LargeNumber left, LargeNumber right)
+        {
+            return left.CompareTo(right) <= 0;
+        }
+
+        public static bool operator >=(LargeNumber left, LargeNumber right)
+        {
+            return left.CompareTo(right) >= 0;
         }
 
         public static LargeNumber operator +(LargeNumber left, LargeNumber right)
         {
-            return new LargeNumber(Sum(left._number, right._number));
-        }
+            var largest = left >= right ? left : right;
+            var shortest = left >= right ? right : left;
+            var carriage = 0L;
+            var chunksSum = new List<long>();
 
-        private static string Multiply(string left, string right)
-        {
-            var longest = left.Length > right.Length ? left : right;
-            var shortest = left.Length <= right.Length ? left : right;
-
-            var accruedMultiplication = "0";
-
-            for (int i = shortest.Length - 1, zeroesToAdd = 0; i >= 0; i--, zeroesToAdd++)
+            for (int i = 0, j = 0; i < largest._chunks.Count; i++, j++)
             {
-                var carriage = 0;
-                var shortestNum = int.Parse(shortest[i].ToString());
-                var currentMultiplication = new StringBuilder(new string('0', zeroesToAdd));
+                var sum = largest._chunks[i] + carriage;
 
-                for (int j = longest.Length - 1; j >= 0; j--)
-                {
-                    var longestNum = int.Parse(longest[j].ToString());
-                    var mult = shortestNum * longestNum + carriage;
-                    var numToAdd = mult % 10;
-                    carriage = mult / 10;
+                if (j < shortest._chunks.Count) sum += shortest._chunks[j];
 
-                    currentMultiplication.Insert(0, numToAdd);
-                }
+                var chunk = sum % 1_000_000_000;
 
-                if (carriage > 0) currentMultiplication.Insert(0, carriage);
-
-                accruedMultiplication = Sum(accruedMultiplication, currentMultiplication.ToString());
+                chunksSum.Add(chunk);
+                carriage = sum / 1_000_000_000;
             }
 
-            return accruedMultiplication;
+            if (carriage > 0) chunksSum.Add(carriage);
+
+            return new LargeNumber(chunksSum);
         }
 
         public static LargeNumber operator *(LargeNumber left, LargeNumber right)
-        {
-            return new LargeNumber(Multiply(left._number, right._number));
+        {            
+            var largest = left >= right ? left : right;
+            var shortest = left >= right ? right : left;
+            var carriage = 0L;
+            var chunksSum = new List<long>();
+            var startIndex = 0;
+
+            foreach (var shortChunk in shortest._chunks)
+            {
+                var index = startIndex++;
+
+                foreach (var largeChunk in largest._chunks)
+                {
+                    var product = shortChunk * largeChunk + carriage;
+
+                    if (index >= chunksSum.Count) chunksSum.Add(product);
+                    else chunksSum[index] += product;
+
+                    carriage = chunksSum[index] / 1_000_000_000;
+                    chunksSum[index] %= 1_000_000_000;
+
+                    index++;
+                }
+            }
+
+            if (carriage > 0) chunksSum.Add(carriage);
+
+            return new LargeNumber(chunksSum);
         }
 
         private static readonly ConcurrentDictionary<int, LargeNumber> _factorials = new ConcurrentDictionary<int, LargeNumber>();
@@ -125,7 +179,7 @@ namespace Utilities
 
             if (number == 1)
             {
-                var baseNumber = new LargeNumber("1");
+                var baseNumber = new LargeNumber(1);
 
                 _factorials.TryAdd(number, baseNumber);
 
@@ -135,9 +189,37 @@ namespace Utilities
             return new LargeNumber(number) * Factorial(number - 1);
         }
 
+        public static LargeNumber Pow(int baseNum, int exponent)
+        {
+            var pow = new LargeNumber(1);
+            var largeBase = new LargeNumber(baseNum);
+
+            for (int i = 0; i < exponent; i++)
+            {
+                pow *= largeBase;
+            }
+
+            return pow;
+        }
+
         public override string ToString()
         {
-            return _number;
+            var stringNumber = new StringBuilder();
+
+            for (int i = _chunks.Count - 1; i >= 0; i--)
+            {
+                var currentStringNum = _chunks[i].ToString();
+
+                if (currentStringNum.Length < _chunkSize && i != _chunks.Count - 1)
+                {
+                    var zeroes = new String('0', _chunkSize - currentStringNum.Length);
+                    currentStringNum = $"{zeroes}{currentStringNum}";
+                }
+
+                stringNumber.Append(currentStringNum);
+            }
+
+            return stringNumber.ToString();
         }
     }
 }
