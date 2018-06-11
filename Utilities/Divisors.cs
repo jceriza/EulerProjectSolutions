@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Utilities
 {
@@ -35,13 +36,13 @@ namespace Utilities
 
         public static (long numerator, long denominator) LowestCommonTerms(long numerator, long denominator)
         {
-            var commonDivisors = Divisors.AllDivisors(numerator);
-            commonDivisors.IntersectWith(Divisors.AllDivisors(denominator));
+            var commonDivisors = AllDivisors(numerator);
+            commonDivisors.IntersectWith(AllDivisors(denominator));
             commonDivisors.Remove(1);
 
-            foreach (var divisor in commonDivisors)
+            foreach (var divisor in commonDivisors.OrderByDescending(c => c))
             {
-                if (numerator % divisor == 0 && denominator % divisor == 0)
+                while (numerator % divisor == 0 && denominator % divisor == 0)
                 {
                     numerator /= divisor;
                     denominator /= divisor;
