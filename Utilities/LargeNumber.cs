@@ -17,6 +17,11 @@ namespace Utilities
             _chunks = NumberInChunks(number.ToString()).ToList().AsReadOnly();
         }
 
+        public LargeNumber(ulong number)
+        {
+            _chunks = NumberInChunks(number.ToString()).ToList().AsReadOnly();
+        }
+
         public LargeNumber(string number)
         {
             _chunks = NumberInChunks(number).ToList().AsReadOnly();
@@ -47,21 +52,58 @@ namespace Utilities
             return one.Equals(other);
         }
 
+        public static bool operator ==(LargeNumber other, object one)
+        {
+            return other.Equals(one);
+        }
+
+        public static bool operator !=(LargeNumber other, object one)
+        {
+            return !other.Equals(one);
+        }
+
+        public static bool operator ==(object one, LargeNumber other)
+        {
+            return other.Equals(one);
+        }
+
+        public static bool operator !=(object one, LargeNumber other)
+        {
+            return !other.Equals(one);
+        }
+
         public static bool operator !=(LargeNumber one, LargeNumber other)
         {
-            return !(one.Equals(other));
+            return !one.Equals(other);
         }
 
         public bool Equals(LargeNumber other)
         {
-            return CompareTo(other) == 1;
+            return CompareTo(other) == 0;
         }
 
         public override bool Equals(object obj)
         {
-            if (obj is LargeNumber largeNumber)
+            switch (obj)
             {
-                return Equals(largeNumber);
+                case LargeNumber largeNumber:
+                    return Equals(largeNumber);
+                case sbyte sbyteNum:
+                    return Equals(new LargeNumber(sbyteNum));
+                case byte byteNum:
+                    return Equals(new LargeNumber(byteNum));
+                case short shortNum:
+                    return Equals(new LargeNumber(shortNum));
+                case ushort ushortNum:
+                    return Equals(new LargeNumber(ushortNum));
+                case int intNum:
+                    return Equals(new LargeNumber(intNum));
+                case uint uintNum:
+                    return Equals(new LargeNumber(uintNum));
+                case long longNum:
+                    return Equals(new LargeNumber(longNum));
+                case ulong ulongNum:
+                    return Equals(new LargeNumber(ulongNum));
             }
 
             return false;
@@ -79,18 +121,7 @@ namespace Utilities
                 return _chunks.Count.CompareTo(other._chunks.Count);
             }
 
-            var differentChunks = _chunks
-                .SkipWhile((chunk, index) => chunk == other._chunks[index])
-                .Select((chunk, index) => (chunk, otherChunk: other._chunks[index]));
-
-            if (differentChunks.Any())
-            {
-                var (chunk, otherChunk) = differentChunks.First();
-
-                return chunk.CompareTo(otherChunk);
-            }
-
-            return 1;
+            return _chunks.Last().CompareTo(other._chunks.Last());
         }
 
         public static bool operator < (LargeNumber left, LargeNumber right)
@@ -172,21 +203,15 @@ namespace Utilities
 
         public static LargeNumber Factorial(int number)
         {
-            if (_factorials.ContainsKey(number))
-            {
-                return _factorials[number];
-            }
+            if (_factorials.ContainsKey(number)) return _factorials[number];
 
-            if (number == 1)
-            {
-                var baseNumber = new LargeNumber(1);
+            if (number == 0 || number == 1) return new LargeNumber(1);
 
-                _factorials.TryAdd(number, baseNumber);
+            var largeNumber = new LargeNumber(number) * Factorial(number - 1);
 
-                return baseNumber;
-            }
+            _factorials.TryAdd(number, largeNumber);
 
-            return new LargeNumber(number) * Factorial(number - 1);
+            return largeNumber;
         }
 
         public static LargeNumber Pow(int baseNum, int exponent)

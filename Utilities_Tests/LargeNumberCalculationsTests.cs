@@ -8,7 +8,7 @@ namespace Utilities_Tests
         [Fact]
         public void Multiplication_187x54_10098()
         {
-            Assert.Equal("47898", (new LargeNumber(887) * new LargeNumber(54)).ToString());
+            Assert.True(new LargeNumber(887) * new LargeNumber(54) == 47898);
         }
 
         [Fact]
@@ -27,7 +27,7 @@ namespace Utilities_Tests
         [Fact]
         public void Factorial_10()
         {
-            Assert.Equal("3628800", LargeNumber.Factorial(10).ToString());
+            Assert.True(3628800 == LargeNumber.Factorial(10));
         }
 
         [Fact]
