@@ -1,19 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Utilities
 {
     public static class PandigitalNumber
     {
-        private static List<int> MissingNumbers(int threshold, int number)
+        private static List<int> MissingNumbers(int threshold, long number, bool addZero)
         {
-            var numbers = Enumerable.Range(1, threshold).Reverse().ToList();
+            var addInitialZero = addZero && number > 0;
+
+            var numbers = Enumerable
+                .Range(addInitialZero ? 0 : 1, addInitialZero ? threshold : threshold - 1)
+                .Reverse()
+                .ToList();
 
             while (number > 0)
             {
-                numbers.Remove(number % 10);
+                numbers.Remove((int)(number % 10));
                 number /= 10;
             }
 
@@ -29,7 +32,7 @@ namespace Utilities
                 return -1;
             }
 
-            foreach (var n in MissingNumbers(threshold, number))
+            foreach (var n in MissingNumbers(threshold, number, false))
             {
                 var result = PandigitalHigherPrime(threshold, missing - 1, number * 10 + n);
 
@@ -139,6 +142,33 @@ namespace Utilities
                 result = PandigitalHigherPrime(i, i, 0);
 
                 if (result > -1) return result;
+            }
+
+            return result;
+        }
+
+        public static bool IsSubstringDivisibilityFeasible(long number)
+        {
+            if (number < 1_000) return true;
+            if (number < 10_000) return (number % 1_000) % 2 == 0;
+            if (number < 100_000) return (number % 1_000) % 3 == 0;
+            if (number < 1_000_000) return (number % 1_000) % 5 == 0;
+            if (number < 10_000_000) return (number % 1_000) % 7 == 0;
+            if (number < 100_000_000) return (number % 1_000) % 11 == 0;
+            if (number < 1_000_000_000) return (number % 1_000) % 13 == 0;
+            return (number % 1_000) % 17 == 0;
+        }
+
+        public static long PandigitalSubstringDivisibility(int threshold, int missing, long number)
+        {
+            if (!IsSubstringDivisibilityFeasible(number)) return 0;
+            if (missing == 0) return number;
+
+            var result = 0L;
+
+            foreach (var n in MissingNumbers(10, number, true))
+            {
+                result += PandigitalSubstringDivisibility(threshold, missing - 1, number * 10 + n);
             }
 
             return result;
