@@ -10,7 +10,7 @@ namespace Exercises
 
         static E022_Name_scores()
         {
-            _names = File.ReadAllText("p022_names.txt").Replace("\"", "").Split(',').ToArray();
+            _names = File.ReadAllText("p022_names.txt").Replace("\"", "").Split(',');
         }
 
         public static int NamesScore()
