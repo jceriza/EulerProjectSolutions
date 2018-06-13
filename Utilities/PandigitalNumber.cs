@@ -7,6 +7,38 @@ namespace Utilities
 {
     public static class PandigitalNumber
     {
+        private static List<int> MissingNumbers(int threshold, int number)
+        {
+            var numbers = Enumerable.Range(1, threshold).Reverse().ToList();
+
+            while (number > 0)
+            {
+                numbers.Remove(number % 10);
+                number /= 10;
+            }
+
+            return numbers;
+        }
+
+        private static int PandigitalHigherPrime(int threshold, int missing, int number)
+        {
+            if (missing == 0)
+            {
+                if (PrimeNumbers.IsPrimeNumber(number)) return number;
+
+                return -1;
+            }
+
+            foreach (var n in MissingNumbers(threshold, number))
+            {
+                var result = PandigitalHigherPrime(threshold, missing - 1, number * 10 + n);
+
+                if (result > -1) return result;
+            }
+
+            return -1;
+        }
+
         private static bool IsPandigital(long number)
         {
             if (number < 10) return true;
@@ -96,6 +128,20 @@ namespace Utilities
             }
 
             return pandigitals;
+        }
+
+        public static int LargestPandigitalPrime()
+        {
+            var result = -1;
+
+            for (int i = 9; i >= 1; i--)
+            {
+                result = PandigitalHigherPrime(i, i, 0);
+
+                if (result > -1) return result;
+            }
+
+            return result;
         }
     }
 }
