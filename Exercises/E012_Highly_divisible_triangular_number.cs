@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Utilities;
+﻿using Utilities;
 
 namespace Exercises
 {
@@ -9,15 +8,16 @@ namespace Exercises
         {
             var threshold = 500 * 500 - 1;
 
-            foreach (var number in TriangleNumbers.Generator().SkipWhile(t => t < threshold))
-            {
-                if (Divisors.AllDivisors(number).Count > 500)
-                {
-                    return number;
-                }
-            }
+            var i = (int)TriPenHexNumbers.TriangleNumberIndex(threshold);
 
-            return -1;
+            long number;
+
+            do
+            {
+                number = TriPenHexNumbers.TriangleNumber(i++);
+            } while (Divisors.AllDivisors(number).Count <= 500);
+
+            return number;
         }
     }
 }

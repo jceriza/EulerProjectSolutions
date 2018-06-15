@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Utilities;
 
 namespace Exercises
 {
@@ -19,11 +20,6 @@ namespace Exercises
                 .ToDictionary(a => a.letter, a => a.index);
         }
 
-        private static int TriangleNumber(int n)
-        {
-            return (n * (n + 1)) / 2;
-        }
-
         public static int NumTriangleWords()
         {
             var triangleNumbers = new List<int> { 1 };
@@ -33,12 +29,10 @@ namespace Exercises
             {
                 var wordNumber = word.Select(w => _dictionary[w]).Sum();
 
-                while (triangleNumbers[triangleNumbers.Count - 1] < wordNumber)
+                if (TriPenHexNumbers.IsTriangleNumber(wordNumber))
                 {
-                    triangleNumbers.Add(TriangleNumber(triangleNumbers.Count));
+                    numTriangleWords++;
                 }
-
-                if (triangleNumbers.Contains(wordNumber)) numTriangleWords++;
             }
 
             return numTriangleWords;

@@ -6,7 +6,21 @@ namespace Exercises
     {
         public static long MinimisedPentagonalNumbersDifference()
         {
-            return PentagonNumbers.MinimisedPentagonalNumbersDifference();
+            for (int k = 2; true; k++)
+            {
+                var kPentagon = TriPenHexNumbers.PentagonNumber(k);
+
+                for (int j = k - 1; j >= 1; j--)
+                {
+                    var jPentagon = TriPenHexNumbers.PentagonNumber(j);
+                    var diff = kPentagon - jPentagon;
+
+                    if (TriPenHexNumbers.IsPentagonNumber(diff) && TriPenHexNumbers.IsPentagonNumber(kPentagon + jPentagon))
+                    {
+                        return diff;
+                    }
+                }
+            }
         }
     }
 }
