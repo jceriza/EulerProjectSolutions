@@ -3,37 +3,29 @@ using System.Collections.Generic;
 
 namespace Utilities
 {
-    public static class Fibonacci
+    public class Fibonacci
     {
-        private static readonly ConcurrentDictionary<int, LargeNumber> _fibonacciValues
-            = new ConcurrentDictionary<int, LargeNumber>();
+        private readonly Dictionary<int, ulong> _fibonacci =
+            new Dictionary<int, ulong>();
 
-        static Fibonacci()
+        public Fibonacci()
         {
-            _fibonacciValues.TryAdd(1, new LargeNumber(1));
-            _fibonacciValues.TryAdd(2, new LargeNumber(1));
+            _fibonacci.Add(1, 1);
+            _fibonacci.Add(2, 1);
         }
 
-        public static LargeNumber NthFibonacciNumber(int num)
+        public ulong Nth(int num)
         {
-            if (_fibonacciValues.TryGetValue(num, out LargeNumber value))
+            if (_fibonacci.TryGetValue(num, out ulong value))
             {
                 return value;
             }
 
-            value = NthFibonacciNumber(num - 1) + NthFibonacciNumber(num - 2);
+            value = Nth(num - 1) + Nth(num - 2);
 
-            _fibonacciValues.TryAdd(num, value);
+            _fibonacci.Add(num, value);
 
             return value;
-        }
-
-        public static IEnumerable<LargeNumber> FibonacciGenerator()
-        {
-            for (int i = 1; true; i++)
-            {
-                yield return NthFibonacciNumber(i);
-            }
         }
     }
 }

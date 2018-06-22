@@ -1,21 +1,40 @@
-﻿using Utilities;
+﻿using System;
+using Utilities;
 
 namespace Exercises
 {
-    public static class E012_Highly_divisible_triangular_number
+    public class E012_Highly_divisible_triangular_number
     {
+        private static bool HasMoreThan500Divisors(long number)
+        {
+            var limit = (int)Math.Floor(Math.Sqrt(number));
+
+            if (limit * 2 <= 500) return false;
+
+            var numDivisors = 2;
+
+            for (int i = 3; i <= limit; i++)
+            {
+                if (number % i == 0)
+                {
+                    numDivisors += 2;
+                }
+            }
+
+            return numDivisors > 500;
+        }
+
         public static long FirstTriangleNumberWithOverFiveHundredDivisors()
         {
-            var threshold = 500 * 500 - 1;
+            var pointReached = false;
+            long number = -1;
 
-            var i = (int)TriPenHexNumbers.TriangleNumberIndex(threshold);
-
-            long number;
-
-            do
+            for (int i = 1; !pointReached; i += 2)
             {
-                number = TriPenHexNumbers.TriangleNumber(i++);
-            } while (Divisors.AllDivisors(number).Count <= 500);
+                number = TriPenHexNumbers.TriangleNumber(i);
+                if (HasMoreThan500Divisors(number))
+                    pointReached = true;
+            }
 
             return number;
         }

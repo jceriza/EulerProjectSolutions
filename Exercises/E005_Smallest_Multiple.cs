@@ -1,25 +1,33 @@
 ﻿namespace Exercises
 {
-    public static class E005_Smallest_Multiple
+    public class E005_Smallest_Multiple
     {
         public static long SmallestMultiple(int multipleUntil)
         {
-            bool validNumber;
+            int minPossible;
 
-            for (int num = multipleUntil; true; num += multipleUntil)
+            for (minPossible = multipleUntil; true; minPossible += multipleUntil)
             {
-                validNumber = true;
+                var isDivisible = true;
 
-                for (int divisor = multipleUntil; divisor > 2; divisor--)
+                for (int j = 2; j <= multipleUntil - 2 && isDivisible; j += 2)
                 {
-                    if (num % divisor != 0)
-                    {
-                        validNumber = false;
-                        break;
-                    }
+                    if (minPossible % j != 0) isDivisible = false;
                 }
 
-                if (validNumber) return num;
+                if (isDivisible) break;
+            }
+
+            for (int result = minPossible; true; result += minPossible)
+            {
+                var isDivisible = true;
+
+                for (int j = 3; j <= multipleUntil; j += 2)
+                {
+                    if (result % j != 0) isDivisible = false;
+                }
+
+                if (isDivisible) return result;
             }
         }
     }

@@ -1,48 +1,47 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace Exercises
 {
-    public static class E014_Longest_Collatz_sequence
+    public class E014_Longest_Collatz_sequence
     {
-        private static Dictionary<long, long> nodes = new Dictionary<long, long> { { 1, 1 } };
-
-        public static long LongestSeriesUnderOneMillion()
+        private static long CollatzNumber(long num)
         {
-            long maxLength = 0;
-            long numberWithMaxLength = 1;
+            if (num % 2 == 0) return num / 2;
+            return num * 3 + 1;
+        }
 
-            for (long i = 2; i < 1_000_000; i++)
+        public static int LongestSeriesUnderOneMillion()
+        {
+            var nodes = new Dictionary<long, int> { { 1, 1 } };
+            var longestSeries = 0;
+            var numberWithLongestSeries = 0;
+
+            for (int i = 2; i < 1_000_000; i++)
             {
-                var currentNode = i;
-                var queue = new Queue<long>();
-
-                while (!nodes.ContainsKey(currentNode))
+                long num = i;
+                int currentSeries = 0;
+                do
                 {
-                    queue.Enqueue(currentNode);
+                    currentSeries++;
+                    num = CollatzNumber(num);
 
-                    if (currentNode % 2 == 0) currentNode /= 2;
-                    else currentNode = 3 * currentNode + 1;
-                }
+                    if (nodes.TryGetValue(num, out int numSeries))
+                    {
+                        currentSeries += numSeries;
+                        nodes.Add(i, currentSeries);
+                        
+                        if (currentSeries > longestSeries)
+                        {
+                            longestSeries = currentSeries;
+                            numberWithLongestSeries = i;
+                        }
 
-                var currentNodeDepth = nodes[currentNode];
-
-                while (queue.Any())
-                {
-                    var totalDepth = queue.Count + currentNodeDepth;
-                    var value = queue.Dequeue();
-
-                    nodes[value] = totalDepth;
-                }
-
-                if (nodes[i] > maxLength)
-                {
-                    numberWithMaxLength = i;
-                    maxLength = nodes[i];
-                }
+                        break;
+                    }
+                } while (num > 1);
             }
 
-            return numberWithMaxLength;
+            return numberWithLongestSeries;
         }
     }
 }

@@ -37,5 +37,15 @@ namespace Utilities_Tests
                 new LargeNumber("93326215443944152681699238856266700490715968264381621468592963895217599993229915608941463976156518286253697920827223758251185210916864000000000000000000000000"),
                 LargeNumber.Factorial(100));
         }
+
+        [Theory]
+        [InlineData("3892832941", "21072702125", "17179869184")]
+        [InlineData("1234560236012", "1234567891011", "7654999")]
+        public void LargeNumberSubtract(string expected, string left, string right)
+        {
+            Assert.Equal(
+                new LargeNumber(expected),
+                new LargeNumber(left) - new LargeNumber(right));
+        }
     }
 }

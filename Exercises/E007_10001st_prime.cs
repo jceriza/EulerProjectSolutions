@@ -7,7 +7,7 @@ namespace Exercises
     {
         public static long Get10001stPrimeNumber()
         {
-            return PrimeNumbers.PrimesGeneratorFrom2().Skip(10000).First();
+            return PrimeNumbers.NthPrimeNumber(10_001);
         }
     }
 }

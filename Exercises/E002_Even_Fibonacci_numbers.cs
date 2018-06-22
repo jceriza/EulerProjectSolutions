@@ -1,24 +1,22 @@
-﻿using System.Linq;
-using Utilities;
+﻿using Utilities;
 
 namespace Exercises
 {
-    public static class E002_Even_Fibonacci_numbers
+    public class E002_Even_Fibonacci_numbers
     {
         public static long EvenSumNotExceeding4Million()
         {
-            int i = 1;
-            long value = long.Parse(Fibonacci.FibonacciGenerator().First().ToString());
-            long sum = 0;
+            ulong value = 0;
+            ulong sum = 0;
+            var fibonacci = new Fibonacci();
 
-            while (value <= 4000000)
+            for (int i = 1; value <= 4_000_000; i++)
             {
+                value = fibonacci.Nth(i);
                 if (value % 2 == 0) sum += value;
-
-                value = long.Parse(Fibonacci.FibonacciGenerator().Skip(i++).First().ToString());
             }
 
-            return sum;
+            return long.Parse(sum.ToString());
         }
     }
 }

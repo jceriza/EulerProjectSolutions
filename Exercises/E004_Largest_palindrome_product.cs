@@ -1,35 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using Utilities;
+﻿using Utilities;
 
 namespace Exercises
 {
-    public static class E004_Largest_palindrome_product
+    public class E004_Largest_palindrome_product
     {
-        private static HashSet<(int, int)> _numbersUsed = new HashSet<(int, int)>();
-
         public static int LargestXDigitPalindrome(int numberDigits)
         {
-            var largestPalindrome = -1;
-            var topLimit = Convert.ToInt32(Math.Pow(10, numberDigits));
-            var bottomLimit = topLimit / 10;
+            var minNum = 1;
 
-            for (int i = topLimit - 1; i > bottomLimit; i--)
+            while (--numberDigits > 0) minNum *= 10;
+
+            var maxNum = minNum * 10;
+            var largestPalindrome = 0;
+
+            for (int i = maxNum - 1; i >= minNum; i--)
             {
-                for (int j = topLimit - 1; j > bottomLimit; j--)
+                if (i * (i - 1) <= largestPalindrome) break;
+
+                for (int j = i - 1; j >= minNum; j--)
                 {
-                    if (!_numbersUsed.Contains((i, j))
-                        && !_numbersUsed.Contains((j, i)))
+                    var mult = i * j;
+
+                    if (mult <= largestPalindrome) break;
+
+                    if (mult > largestPalindrome && Palindrome.IsPalindrome(mult))
                     {
-                        _numbersUsed.Add((i, j));
-
-                        var multiplication = i * j;
-
-                        if (Palindrome.IsPalindrome(multiplication.ToString())
-                            && multiplication > largestPalindrome)
-                        {
-                            largestPalindrome = multiplication;
-                        }
+                        largestPalindrome = mult;
                     }
                 }
             }

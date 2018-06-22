@@ -7,7 +7,7 @@ namespace Exercises
     {
         public static long SumPrimesBelowN(int num)
         {
-            return PrimeNumbers.PrimesGeneratorFrom2().TakeWhile(n => n < num).Sum();
+            return PrimeNumbers.PrimesBelowN(num).Sum();
         }
     }
 }

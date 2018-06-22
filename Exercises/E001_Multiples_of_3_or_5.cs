@@ -1,6 +1,6 @@
 ﻿namespace Exercises
 {
-    public static class E001_Multiples_of_3_or_5
+    public class E001_Multiples_of_3_or_5
     {
         public static int SumOfMultiplesOf3Or5Below(int number)
         {

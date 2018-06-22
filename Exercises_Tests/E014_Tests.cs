@@ -6,7 +6,7 @@ namespace Exercises_Tests
     public class E014_Tests
     {
         [Fact]
-        public void FirstTriangleNumberWithOverFiveHundredDivisors()
+        public void LongestSeriesUnderOneMillion()
         {
             Assert.Equal(
                 837799,

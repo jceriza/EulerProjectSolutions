@@ -27,9 +27,9 @@ namespace Utilities
             _chunks = NumberInChunks(number).ToList().AsReadOnly();
         }
 
-        private LargeNumber(List<long> chunks)
+        private LargeNumber(IEnumerable<long> chunks)
         {
-            _chunks = chunks.AsReadOnly();
+            _chunks = chunks.ToList().AsReadOnly();
         }
 
         private static IEnumerable<long> NumberInChunks(string number)
@@ -47,29 +47,29 @@ namespace Utilities
             }
         }
 
+        public static bool operator ==(LargeNumber one, object other)
+        {
+            return one == ObjectToLargeNumber(other);
+        }
+
+        public static bool operator !=(LargeNumber one, object other)
+        {
+            return one != ObjectToLargeNumber(other);
+        }
+
+        public static bool operator ==(object one, LargeNumber other)
+        {
+            return ObjectToLargeNumber(one) == other;
+        }
+
         public static bool operator ==(LargeNumber one, LargeNumber other)
         {
             return one.Equals(other);
         }
 
-        public static bool operator ==(LargeNumber other, object one)
-        {
-            return other.Equals(one);
-        }
-
-        public static bool operator !=(LargeNumber other, object one)
-        {
-            return !other.Equals(one);
-        }
-
-        public static bool operator ==(object one, LargeNumber other)
-        {
-            return other.Equals(one);
-        }
-
         public static bool operator !=(object one, LargeNumber other)
         {
-            return !other.Equals(one);
+            return ObjectToLargeNumber(one) != other;
         }
 
         public static bool operator !=(LargeNumber one, LargeNumber other)
@@ -84,29 +84,7 @@ namespace Utilities
 
         public override bool Equals(object obj)
         {
-            switch (obj)
-            {
-                case LargeNumber largeNumber:
-                    return Equals(largeNumber);
-                case sbyte sbyteNum:
-                    return Equals(new LargeNumber(sbyteNum));
-                case byte byteNum:
-                    return Equals(new LargeNumber(byteNum));
-                case short shortNum:
-                    return Equals(new LargeNumber(shortNum));
-                case ushort ushortNum:
-                    return Equals(new LargeNumber(ushortNum));
-                case int intNum:
-                    return Equals(new LargeNumber(intNum));
-                case uint uintNum:
-                    return Equals(new LargeNumber(uintNum));
-                case long longNum:
-                    return Equals(new LargeNumber(longNum));
-                case ulong ulongNum:
-                    return Equals(new LargeNumber(ulongNum));
-            }
-
-            return false;
+            return Equals(ObjectToLargeNumber(obj));
         }
 
         public override int GetHashCode()
@@ -121,22 +99,99 @@ namespace Utilities
                 return _chunks.Count.CompareTo(other._chunks.Count);
             }
 
-            return _chunks.Last().CompareTo(other._chunks.Last());
+            for (int i = _chunks.Count - 1; i >= 0; i--)
+            {
+                if (_chunks[i] != other._chunks[i]) return _chunks[i].CompareTo(other._chunks[i]);
+            }
+
+            return 0;
         }
 
-        public static bool operator < (LargeNumber left, LargeNumber right)
+        private static LargeNumber ObjectToLargeNumber(object obj)
+        {
+            switch (obj)
+            {
+                case LargeNumber largeNumber:
+                    return largeNumber;
+                case sbyte sbyteNum:
+                    return new LargeNumber(sbyteNum);
+                case byte byteNum:
+                    return new LargeNumber(byteNum);
+                case short shortNum:
+                    return new LargeNumber(shortNum);
+                case ushort ushortNum:
+                    return new LargeNumber(ushortNum);
+                case int intNum:
+                    return new LargeNumber(intNum);
+                case uint uintNum:
+                    return new LargeNumber(uintNum);
+                case long longNum:
+                    return new LargeNumber(longNum);
+                case ulong ulongNum:
+                    return new LargeNumber(ulongNum);
+                default:
+                    throw new NotSupportedException("You can't use this type");
+            }
+        }
+
+        public int CompareTo(object other)
+        {
+            return CompareTo(ObjectToLargeNumber(other));
+        }
+
+        public static bool operator <(LargeNumber left, LargeNumber right)
         {
             return left.CompareTo(right) < 0;
         }
 
+        public static bool operator <(object left, LargeNumber right)
+        {
+            return ObjectToLargeNumber(left) < right;
+        }
+
+        public static bool operator <(LargeNumber left, object right)
+        {
+            return left < ObjectToLargeNumber(right);
+        }
+
+        public static bool operator >(object left, LargeNumber right)
+        {
+            return ObjectToLargeNumber(left) > right;
+        }
+
+        public static bool operator >(LargeNumber left, object right)
+        {
+            return left > ObjectToLargeNumber(right);
+        }
+
         public static bool operator >(LargeNumber left, LargeNumber right)
         {
-            return left.CompareTo(right) > 0;
+            return left.CompareTo(right) < 0;
+        }
+
+        public static bool operator <=(object left, LargeNumber right)
+        {
+            return ObjectToLargeNumber(left) <= right;
+        }
+
+        public static bool operator <=(LargeNumber left, object right)
+        {
+            return left <= ObjectToLargeNumber(right);
         }
 
         public static bool operator <=(LargeNumber left, LargeNumber right)
         {
             return left.CompareTo(right) <= 0;
+        }
+
+        public static bool operator >=(object left, LargeNumber right)
+        {
+            return ObjectToLargeNumber(left) >= right;
+        }
+
+        public static bool operator >=(LargeNumber left, object right)
+        {
+            return left >= ObjectToLargeNumber(right);
         }
 
         public static bool operator >=(LargeNumber left, LargeNumber right)
@@ -151,11 +206,11 @@ namespace Utilities
             var carriage = 0L;
             var chunksSum = new List<long>();
 
-            for (int i = 0, j = 0; i < largest._chunks.Count; i++, j++)
+            for (int i = 0; i < largest._chunks.Count; i++)
             {
                 var sum = largest._chunks[i] + carriage;
 
-                if (j < shortest._chunks.Count) sum += shortest._chunks[j];
+                if (i < shortest._chunks.Count) sum += shortest._chunks[i];
 
                 var chunk = sum % 1_000_000_000;
 
@@ -166,6 +221,59 @@ namespace Utilities
             if (carriage > 0) chunksSum.Add(carriage);
 
             return new LargeNumber(chunksSum);
+        }
+
+        public static LargeNumber operator +(LargeNumber left, object right)
+        {
+            return left + ObjectToLargeNumber(right);
+        }
+
+        public static LargeNumber operator +(object left, LargeNumber right)
+        {
+            return ObjectToLargeNumber(left) + right;
+        }
+
+        public static LargeNumber operator -(LargeNumber left, LargeNumber right)
+        {
+            if (left < right) throw new NotSupportedException("Negative numbers not supported");
+
+            var carriage = false;
+            var chunksSubtract = new List<long>();
+
+            for (int i = 0; i < left._chunks.Count; i++)
+            {
+                long subtract = left._chunks[i];
+
+                if (carriage) subtract -= 1;
+
+                if (i < right._chunks.Count) subtract -= right._chunks[i];
+
+                if (subtract < 0)
+                {
+                    carriage = true;
+                    subtract = 1_000_000_000 - (0 - subtract);
+                }
+                else carriage = false;
+
+                chunksSubtract.Add(subtract);
+            }
+
+            while (chunksSubtract[chunksSubtract.Count - 1] == 0 && chunksSubtract.Count > 1)
+            {
+                chunksSubtract.RemoveAt(chunksSubtract.Count - 1);
+            }
+
+            return new LargeNumber(chunksSubtract);
+        }
+
+        public static LargeNumber operator -(LargeNumber left, object right)
+        {
+            return left - ObjectToLargeNumber(right);
+        }
+
+        public static LargeNumber operator -(object left, LargeNumber right)
+        {
+            return ObjectToLargeNumber(left) - right;
         }
 
         public static LargeNumber operator *(LargeNumber left, LargeNumber right)
@@ -197,6 +305,31 @@ namespace Utilities
             if (carriage > 0) chunksSum.Add(carriage);
 
             return new LargeNumber(chunksSum);
+        }
+
+        public static LargeNumber operator *(LargeNumber left, object right)
+        {
+            return left * ObjectToLargeNumber(right);
+        }
+
+        public static LargeNumber operator /(LargeNumber left, LargeNumber right)
+        {
+            if (left < right) throw new NotSupportedException("Left side division has to be higher than right side.");
+
+            var binaryLeft = new BinaryNumber(left);
+            var binaryRight = new BinaryNumber(right);
+
+            return (binaryLeft / binaryRight).ToLargeNumber();
+        }
+
+        public static LargeNumber operator /(object left, LargeNumber right)
+        {
+            return ObjectToLargeNumber(left) / right;
+        }
+
+        public static LargeNumber operator /(LargeNumber left, object right)
+        {
+            return left / ObjectToLargeNumber(right);
         }
 
         private static readonly ConcurrentDictionary<int, LargeNumber> _factorials = new ConcurrentDictionary<int, LargeNumber>();
