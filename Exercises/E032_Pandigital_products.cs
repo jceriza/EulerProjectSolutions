@@ -12,7 +12,7 @@ namespace Exercises
 
             for (long a = 2; a <= 98; a++)
             {
-                if (PandigitalNumber.IsPandigital(a))
+                if (PandigitalNumber.IsPandigitalWithoutZero(a))
                 {
                     var bInit = a < 10 ? 1234 : 123;
                     var bThreshold = a < 10 ? 9876 : 987;
@@ -21,11 +21,11 @@ namespace Exercises
                     {
                         var ab = a.JoinWith(b);
 
-                        if (PandigitalNumber.IsPandigital(ab))
+                        if (PandigitalNumber.IsPandigitalWithoutZero(ab))
                         {
                             var product = a * b;
 
-                            if (PandigitalNumber.IsPandigital(product.JoinWith(ab))
+                            if (PandigitalNumber.IsPandigitalWithoutZero(product.JoinWith(ab))
                                 && !pandigitalProducts.Contains(product))
                             {
                                 pandigitalProducts.Add(product);

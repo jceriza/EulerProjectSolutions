@@ -17,7 +17,7 @@ namespace Utilities
             }
         }
 
-        public static List<long> PrimesBelowN(int num)
+        public static List<long> PrimesBelowN(int num, int from = 2)
         {
             var primes = Enumerable.Range(2, num - 2).ToDictionary(n => (long)n, n => true);
             var limit = (int)Math.Floor(Math.Sqrt(num));
@@ -35,7 +35,7 @@ namespace Utilities
                 }
             }
 
-            return primes.Where(p => p.Value).Select(p => p.Key).ToList();
+            return primes.Where(p => p.Value && p.Key >= from).Select(p => p.Key).ToList();
         }
 
         public static bool IsPrimeNumber(long num)

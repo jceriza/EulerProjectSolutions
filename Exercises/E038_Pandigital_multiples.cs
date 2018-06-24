@@ -12,7 +12,7 @@ namespace Exercises
 
             for (long i = 1; i <= 9876; i++)
             {
-                if (PandigitalNumber.IsPandigital(i))
+                if (PandigitalNumber.IsPandigitalWithoutZero(i))
                 {
                     var pandigitalNumber = i;
 
@@ -21,7 +21,7 @@ namespace Exercises
                         pandigitalNumber = pandigitalNumber.JoinWith(i * j);
 
                         if (pandigitalNumber > 987_654_321
-                            || !PandigitalNumber.IsPandigital(pandigitalNumber)) break;
+                            || !PandigitalNumber.IsPandigitalWithoutZero(pandigitalNumber)) break;
 
                         if (pandigitalNumber >= 123_456_789)
                         {

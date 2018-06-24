@@ -5,7 +5,7 @@ namespace Utilities
 {
     public class PandigitalNumber
     {
-        public static bool IsPandigital(long number)
+        public static bool IsPandigitalWithoutZero(long number)
         {
             if (number < 10) return true;
             var numbers = new List<long>();
@@ -18,7 +18,7 @@ namespace Utilities
                 number /= 10;
             }
 
-            return numbers.Distinct().Count() == numbers.Count();
+            return true;
         }
     }
 }
