@@ -7,7 +7,15 @@ namespace Exercises
     {
         public static long SumPrimesBelowN(int num)
         {
-            return PrimeNumbers.PrimesBelowN(num).Sum();
+            var primes = PrimeNumbers.PrimesBelowN(num);
+            long sum = 2;
+
+            for (int i = 3; i < primes.Length; i += 2)
+            {
+                if (primes[i]) sum += i;
+            }
+
+            return sum;
         }
     }
 }

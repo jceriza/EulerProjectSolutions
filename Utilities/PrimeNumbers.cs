@@ -17,10 +17,13 @@ namespace Utilities
             }
         }
 
-        public static List<long> PrimesBelowN(int num, int from = 2)
+        public static bool[] PrimesBelowN(long num)
         {
-            var primes = Enumerable.Range(2, num - 2).ToDictionary(n => (long)n, n => true);
-            var limit = (int)Math.Floor(Math.Sqrt(num));
+            var primes = new bool[num - 1];
+
+            for (int i = 2; i < primes.Length; i++) primes[i] = true;
+
+            var limit = (int)Math.Floor(Math.Sqrt(num - 1));
 
             for (int i = 2; i <= limit; i++)
             {
@@ -28,14 +31,14 @@ namespace Utilities
                 {
                     var iSquare = i * i;
                     
-                    for (int cont = 0, j = iSquare; j < num; cont++, j = iSquare + cont * i)
+                    for (int cont = 0, j = iSquare; j < num - 1; cont++, j = iSquare + cont * i)
                     {
                         primes[j] = false;
                     }
                 }
             }
-
-            return primes.Where(p => p.Value && p.Key >= from).Select(p => p.Key).ToList();
+            
+            return primes;
         }
 
         public static bool IsPrimeNumber(long num)
