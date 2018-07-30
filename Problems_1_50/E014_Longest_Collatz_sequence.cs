@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Exercises
+﻿namespace Exercises
 {
     public class E014_Longest_Collatz_sequence
     {
@@ -12,11 +10,13 @@ namespace Exercises
 
         public static int LongestSeriesUnderOneMillion()
         {
-            var nodes = new Dictionary<long, int> { { 1, 1 } };
+            const int limit = 1_000_000;
+            var nodes = new int[limit];
+            nodes[1] = 1;
             var longestSeries = 0;
             var numberWithLongestSeries = 0;
 
-            for (int i = 2; i < 1_000_000; i++)
+            for (int i = 2; i < limit; i++)
             {
                 long num = i;
                 int currentSeries = 0;
@@ -25,10 +25,10 @@ namespace Exercises
                     currentSeries++;
                     num = CollatzNumber(num);
 
-                    if (nodes.TryGetValue(num, out int numSeries))
+                    if (num < limit && nodes[num] > 0)
                     {
-                        currentSeries += numSeries;
-                        nodes.Add(i, currentSeries);
+                        currentSeries += nodes[num];
+                        nodes[i] = currentSeries;
                         
                         if (currentSeries > longestSeries)
                         {

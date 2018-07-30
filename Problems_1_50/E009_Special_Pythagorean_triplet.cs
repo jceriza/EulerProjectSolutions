@@ -1,6 +1,6 @@
 ﻿namespace Exercises
 {
-    public static class E009_Special_Pythagorean_triplet
+    public class E009_Special_Pythagorean_triplet
     {
         public static int PythagoreanProduct(int desiredSum)
         {

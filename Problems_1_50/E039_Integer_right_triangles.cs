@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Utilities;
+﻿using Utilities;
 
 namespace Exercises
 {
-    public static class E039_Integer_right_triangles
+    public class E039_Integer_right_triangles
     {
         public static int MaxSolutionsPerimeter()
         {
@@ -14,7 +11,7 @@ namespace Exercises
 
             for (int perimeter = 1; perimeter <= 1000; perimeter++)
             {
-                var numSolutions = new RightTriangle(perimeter).Solutions().Count;
+                var numSolutions = new RightTriangle(perimeter).Solutions();
 
                 if (numSolutions > maxSolutions)
                 {

@@ -3,7 +3,7 @@ using Utilities;
 
 namespace Exercises
 {
-    public static class E029_Distinct_powers
+    public class E029_Distinct_powers
     {
         public static HashSet<string> Sequence(int from, int to)
         {

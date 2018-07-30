@@ -4,7 +4,7 @@ using Utilities.TrieDS;
 
 namespace Exercises
 {
-    public static class E022_Name_scores
+    public class E022_Name_scores
     {
         private static readonly string[] _names;
 

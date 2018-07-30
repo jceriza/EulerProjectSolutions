@@ -2,7 +2,7 @@
 
 namespace Exercises
 {
-    public static class E024_Lexicographic_permutations
+    public class E024_Lexicographic_permutations
     {
         public static string OneMillionthLexicographicPermutation()
         {

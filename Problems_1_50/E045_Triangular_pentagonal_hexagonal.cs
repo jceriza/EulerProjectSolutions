@@ -2,7 +2,7 @@
 
 namespace Exercises
 {
-    public static class E045_Triangular_pentagonal_hexagonal
+    public class E045_Triangular_pentagonal_hexagonal
     {
         public static long TriangularPentagonalHexagonal()
         {

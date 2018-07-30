@@ -26,11 +26,6 @@ namespace Utilities
                 numbers.Push(i);
 
                 aux *= 2;
-
-                if (new LargeNumber("1237940039285380274899124224") == aux)
-                {
-
-                }
             }
 
             var number = new List<byte>();
@@ -79,6 +74,16 @@ namespace Utilities
         public BinaryNumber(LargeNumber largeNumber)
         {
             _binary = BinaryNumberString(largeNumber);
+        }
+
+        public bool IsPalindrome()
+        {
+            for (int i = 0, j = _binary.Count - 1; i < j; i++, j--)
+            {
+                if (_binary[i] != _binary[j]) return false;
+            }
+
+            return true;
         }
 
         public static BinaryNumber operator *(BinaryNumber left, BinaryNumber right)

@@ -1,38 +1,45 @@
-﻿using System.Linq;
-using Utilities;
+﻿using Utilities;
 
 namespace Exercises
 {
-    public static class E046_Goldbach_other_conjecture
+    public class E046_Goldbach_other_conjecture
     {
-        private static bool CompliesWithGoldbachConjecture(int number)
+        private readonly bool[] _primeNumbers;
+
+        public E046_Goldbach_other_conjecture()
         {
-            var primes = PrimeNumbers.PrimesGeneratorFrom2().TakeWhile(prime => prime <= number);
+            _primeNumbers = PrimeNumbers.PrimesUntilN(10_000);
+        }
 
-            foreach (var prime in primes)
+        private bool CompliesWithGoldbachConjecture(int number)
+        {
+            for (int potentialPrime = 0; potentialPrime <= number; potentialPrime++)
             {
-                var rest = number - prime;
-
-                var i = 1;
-                int mult;
-
-                do
+                if (_primeNumbers[potentialPrime])
                 {
-                    mult = 2 * (i * i++);
-                } while (mult < rest);
+                    var rest = number - potentialPrime;
 
-                if (mult == rest) return true;
+                    var i = 1;
+                    int mult;
+
+                    do
+                    {
+                        mult = 2 * (i * i++);
+                    } while (mult < rest);
+
+                    if (mult == rest) return true;
+                }
             }
 
             return false;
         }
 
-        private static bool IsComposite(int number)
+        private bool IsComposite(int number)
         {
-            return !PrimeNumbers.IsPrimeNumber(number);
+            return !_primeNumbers[number];
         }
 
-        public static long SmallestOddNotGoldbach()
+        public long SmallestOddNotGoldbach()
         {
             int number = 1;
             do

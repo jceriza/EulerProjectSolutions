@@ -1,6 +1,6 @@
 ﻿namespace Exercises
 {
-    public static class E047_Distinct_primes_factors
+    public class E047_Distinct_primes_factors
     {
         public static bool HasNPrimeFactors(int number, int n)
         {

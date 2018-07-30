@@ -24,7 +24,7 @@ namespace Utilities
 
         public LargeNumber(string number)
         {
-            _chunks = NumberInChunks(number).ToList().AsReadOnly();
+            _chunks = NumberInChunks(number).AsReadOnly();
         }
 
         private LargeNumber(IEnumerable<long> chunks)
@@ -32,18 +32,40 @@ namespace Utilities
             _chunks = chunks.ToList().AsReadOnly();
         }
 
-        private static IEnumerable<long> NumberInChunks(string number)
+        private static List<long> NumberInChunks(string number)
         {
+            var chunks = new List<long>();
+
             for (int i = number.Length - _chunkSize; i >= 0; i -= _chunkSize)
             {
-                yield return long.Parse(number.Substring(i, _chunkSize));
+                chunks.Add(long.Parse(number.Substring(i, _chunkSize)));
             }
 
             var remaining = number.Length % _chunkSize;
 
             if (remaining > 0)
             {
-                yield return long.Parse(number.Substring(0, remaining));
+                chunks.Add(long.Parse(number.Substring(0, remaining)));
+            }
+
+            return chunks;
+        }
+
+        public int Length
+        {
+            get
+            {
+                var length = (_chunks.Count - 1) * _chunkSize;
+
+                var aux = _chunks[_chunks.Count - 1];
+
+                while (aux > 0)
+                {
+                    length++;
+                    aux /= 10;
+                }
+
+                return length;
             }
         }
 
@@ -280,13 +302,14 @@ namespace Utilities
         {            
             var largest = left >= right ? left : right;
             var shortest = left >= right ? right : left;
-            var carriage = 0L;
+            long carriage;
             var chunksSum = new List<long>();
             var startIndex = 0;
 
             foreach (var shortChunk in shortest._chunks)
             {
                 var index = startIndex++;
+                carriage = 0;
 
                 foreach (var largeChunk in largest._chunks)
                 {
@@ -300,9 +323,9 @@ namespace Utilities
 
                     index++;
                 }
-            }
 
-            if (carriage > 0) chunksSum.Add(carriage);
+                if (carriage > 0) chunksSum.Add(carriage);
+            }
 
             return new LargeNumber(chunksSum);
         }

@@ -1,15 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Utilities;
+﻿using Utilities;
 
 namespace Exercises
 {
     public class E037_Truncatable_primes
     {
-        private static bool IsTruncatablePrime(long num)
+        private readonly bool[] _primeNumbers; 
+
+        public E037_Truncatable_primes()
         {
+            _primeNumbers = PrimeNumbers.PrimesUntilN(1_000_000);
+        }
+
+        private bool IsTruncatablePrime(int num)
+        {
+            if (!_primeNumbers[num]) return false;
+
             var leftToRight = 1;
             var rightToLeft = 10;
             var aux = num;
@@ -22,11 +27,9 @@ namespace Exercises
 
             while (leftToRight > 1)
             {
-                if (!(PrimeNumbers.IsPrimeNumber(num / leftToRight)
-                    && PrimeNumbers.IsPrimeNumber(num % rightToLeft)))
-                {
+                if (!_primeNumbers[num / leftToRight]
+                    || !_primeNumbers[num % rightToLeft])
                     return false;
-                }
 
                 leftToRight /= 10;
                 rightToLeft *= 10;
@@ -35,18 +38,17 @@ namespace Exercises
             return true;
         }
         
-        public static long TruncatablePrimesSum()
+        public int TruncatablePrimesSum()
         {
-            var sum = 0L;
-            var count = 0;
+            var sum = 0;
 
-            foreach (var prime in PrimeNumbers.PrimesGeneratorFrom2().SkipWhile(p => p < 10))
+            for (int i = 11, count = 0; count < 11; i += 2)
             {
-                if (IsTruncatablePrime(prime))
+                if (IsTruncatablePrime(i))
                 {
-                    sum += prime;
+                    sum += i;
 
-                    if (++count == 11) break;
+                    count++;
                 }
             }
 

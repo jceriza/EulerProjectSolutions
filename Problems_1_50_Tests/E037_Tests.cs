@@ -10,7 +10,7 @@ namespace Exercises_Tests
         {
             Assert.Equal(
                 748317,
-                E037_Truncatable_primes.TruncatablePrimesSum());
+                new E037_Truncatable_primes().TruncatablePrimesSum());
         }
     }
 }

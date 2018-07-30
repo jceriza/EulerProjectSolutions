@@ -1,29 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Utilities
 {
     public class PrimeNumbers
     {
-        public static IEnumerable<long> PrimesGeneratorFrom2()
+        public static bool[] PrimesUntilN(long num)
         {
-            for (int i = 1; true; i++)
-            {
-                if (IsPrimeNumber(i))
-                {
-                    yield return i;
-                }
-            }
-        }
-
-        public static bool[] PrimesBelowN(long num)
-        {
-            var primes = new bool[num - 1];
+            var primes = new bool[num + 1];
 
             for (int i = 2; i < primes.Length; i++) primes[i] = true;
 
-            var limit = (int)Math.Floor(Math.Sqrt(num - 1));
+            var limit = (int)Math.Floor(Math.Sqrt(num));
 
             for (int i = 2; i <= limit; i++)
             {
@@ -31,7 +19,7 @@ namespace Utilities
                 {
                     var iSquare = i * i;
                     
-                    for (int cont = 0, j = iSquare; j < num - 1; cont++, j = iSquare + cont * i)
+                    for (int cont = 0, j = iSquare; j <= num; cont++, j = iSquare + cont * i)
                     {
                         primes[j] = false;
                     }

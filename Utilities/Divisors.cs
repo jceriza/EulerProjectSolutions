@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,38 +6,42 @@ namespace Utilities
 {
     public static class Divisors
     {
-        private static ConcurrentDictionary<long, HashSet<long>> _factorsDictionary = new ConcurrentDictionary<long, HashSet<long>>();
-
-        private static HashSet<long> GetAllDivisors(long number)
+        private static List<long> GetAllDivisors(long number)
         {
-            if (number == 0) return new HashSet<long>();
+            if (number == 0) return new List<long>();
+            if (number == 1) return new List<long> { 1 };
 
-            if (_factorsDictionary.ContainsKey(number)) return _factorsDictionary[number];
+            var limit = (int)Math.Floor(Math.Sqrt(number));
 
-            var factors = new HashSet<long>() { 1, number };
+            var factors = new List<long> { 1, number };
 
-            var limit = Math.Sqrt(number);
-           
             for (int i = 2; i <= limit; i++)
             {
-                if (number % i == 0)
+                if (number % i == 0)    
                 {
-                    factors.Add(i);
-                    factors.Add(number / i);
-                    factors.UnionWith(GetAllDivisors(number / i));
+                    var divisor = number / i;
+
+                    factors.Insert(factors.Count / 2, divisor);
+
+                    if (divisor != i)
+                        factors.Insert(factors.Count / 2, i);
                 }
             }
-
-            _factorsDictionary.TryAdd(number, factors);
 
             return factors;
         }
 
         public static (long numerator, long denominator) LowestCommonTerms(long numerator, long denominator)
         {
-            var commonDivisors = AllDivisors(numerator);
-            commonDivisors.IntersectWith(AllDivisors(denominator));
-            commonDivisors.Remove(1);
+            var numeratorDivisors = AllDivisors(numerator);
+            var denominatorDivisors = AllDivisors(denominator);
+            var commonDivisors = new List<long>();
+
+            for (int i = 1; i < numeratorDivisors.Count; i++)
+            {
+                if (denominatorDivisors.ContainsWithBinarySearch(numeratorDivisors[i]))
+                    commonDivisors.Add(numeratorDivisors[i]);
+            }
 
             foreach (var divisor in commonDivisors.OrderByDescending(c => c))
             {
@@ -52,7 +55,7 @@ namespace Utilities
             return (numerator, denominator);
         }
 
-        public static HashSet<long> ProperDivisors(long number)
+        public static List<long> ProperDivisors(long number)
         {
             var factors = GetAllDivisors(number);
 
@@ -61,7 +64,7 @@ namespace Utilities
             return factors;
         }
 
-        public static HashSet<long> AllDivisors(long number)
+        public static List<long> AllDivisors(long number)
         {
             return GetAllDivisors(number);
         }

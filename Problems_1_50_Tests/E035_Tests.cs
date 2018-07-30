@@ -10,7 +10,7 @@ namespace Exercises_Tests
         {
             Assert.Equal(
                 13,
-                E035_Circular_primes.NumCircularPrimesBelowN(100));
+                new E035_Circular_primes(100).NumCircularPrimes());
         }
 
         [Fact]
@@ -18,7 +18,7 @@ namespace Exercises_Tests
         {
             Assert.Equal(
                 55,
-                E035_Circular_primes.NumCircularPrimesBelowN(1_000_000));
+                new E035_Circular_primes(1_000_000).NumCircularPrimes());
         }
     }
 }

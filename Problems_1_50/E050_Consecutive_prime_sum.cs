@@ -6,7 +6,7 @@ namespace Exercises
     {
         public static int ConsecutivePrimeSum(int num)
         {
-            var primes = PrimeNumbers.PrimesBelowN(num);
+            var primes = PrimeNumbers.PrimesUntilN(num);
             int greatestPrimeSum = 0;
             int largestStreak = 0;
 

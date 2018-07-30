@@ -5,39 +5,36 @@ namespace Utilities
 {
     public static class Fraction
     {
-        public static List<int> UnitFractionCycleDecimals(int divisor)
+        public static int UnitFractionCycleLength(int divisor)
         {
+            var divisors = new List<(int numDecimals, int remainder)>();
+
             var dividend = 1;
-            var remainder = dividend % divisor;
-            var remaindersAndDecimals = new List<(int remainder, List<int> decimals)>();
+            int remainder = 1;
+            var cycleFound = false;
 
-            while (remainder != 0)
+            do
             {
-                if (remaindersAndDecimals.Any(r => r.remainder == remainder))
-                {
-                    return remaindersAndDecimals
-                        .SkipWhile(r => r.remainder != remainder)
-                        .SelectMany(r => r.decimals)
-                        .ToList();
-                }
+                var numDecimals = 0;
 
-                var decimals = new List<int>();
-
-                while (dividend < divisor)
+                while (dividend / divisor == 0)
                 {
                     dividend *= 10;
-                    if (dividend < divisor) decimals.Add(0);
+                    numDecimals++;
                 }
 
-                decimals.Add(dividend / divisor);
-
-                remaindersAndDecimals.Add((remainder, decimals));
-
+                divisors.Add((numDecimals, remainder));
+                
                 remainder = dividend % divisor;
                 dividend = remainder;
-            }
 
-            return new List<int>();
+                if (divisors.Any(d => d.remainder == remainder))
+                    cycleFound = true;
+            } while (remainder != 0 && !cycleFound);
+
+            if (!cycleFound) return 0;
+
+            return divisors.SkipWhile(d => d.remainder != remainder).Sum(d => d.numDecimals);
         }
     }
 }

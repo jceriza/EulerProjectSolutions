@@ -2,7 +2,7 @@
 
 namespace Exercises
 {
-    public static class E021_Amicable_numbers
+    public class E021_Amicable_numbers
     {
         public static long SumOfAmicableNumbersUnder10000()
         {

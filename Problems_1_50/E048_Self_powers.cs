@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Utilities;
+﻿using Utilities;
 
 namespace Exercises
 {
-    public static class E048_Self_powers
+    public class E048_Self_powers
     {
         public static LargeNumber SelfPowerSeriesSumUntilN(int n)
         {

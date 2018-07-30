@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Utilities
+﻿namespace Utilities
 {
     public static class Numbers
     {
@@ -30,22 +28,15 @@ namespace Utilities
             return a + b;
         }
 
-        private static long BiggestSquare(long num)
+        public static int Pow(this int a, int b)
         {
-            if (num < 1) return 0;
-            var found = false;
-            long square = 1;
-            long mult = 1;
+            if (a <= 1) return a;
 
-            for (long i = 1; !found; i++)
-            {
-                square = mult;
-                mult = i * i;
+            var pow = a;
 
-                if (mult > num) found = true;
-            }
+            while (b-- > 1) pow *= a;
 
-            return square;
+            return pow;
         }
     }
 }

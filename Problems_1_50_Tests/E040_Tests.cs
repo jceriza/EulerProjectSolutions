@@ -6,7 +6,7 @@ namespace Exercises_Tests
     public class E040_Tests
     {
         [Fact]
-        public void MaxSolutionsPerimeter()
+        public void ChampernownesConstant()
         {
             Assert.Equal(
                 210,

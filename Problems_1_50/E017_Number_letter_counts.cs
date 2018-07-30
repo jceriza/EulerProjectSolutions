@@ -3,7 +3,7 @@ using Utilities;
 
 namespace Exercises
 {
-    public static class E017_Number_letter_counts
+    public class E017_Number_letter_counts
     {
         public static int NumberOfLettersInSpelledNumbers(int from, int to)
         {

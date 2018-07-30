@@ -3,7 +3,7 @@ using Utilities;
 
 namespace Exercises
 {
-    public static class E013_Large_sum
+    public class E013_Large_sum
     {
         public static string FirstTenDigitsOf50NumbersSum(string numbers)
         {

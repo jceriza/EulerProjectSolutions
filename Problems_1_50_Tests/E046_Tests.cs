@@ -10,7 +10,7 @@ namespace Exercises_Tests
         {
             Assert.Equal(
                 5777,
-                E046_Goldbach_other_conjecture.SmallestOddNotGoldbach());
+                new E046_Goldbach_other_conjecture().SmallestOddNotGoldbach());
         }
     }
 }

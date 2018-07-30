@@ -2,7 +2,7 @@
 
 namespace Exercises
 {
-    public static class E019_Counting_Sundays
+    public class E019_Counting_Sundays
     {
         public static int CountSundays()
         {

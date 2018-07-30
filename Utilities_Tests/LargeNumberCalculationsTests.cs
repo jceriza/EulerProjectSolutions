@@ -14,7 +14,8 @@ namespace Utilities_Tests
         [Fact]
         public void LargeNumberSum()
         {
-            Assert.Equal(new LargeNumber("5109094217170944009090942171709440000"), new LargeNumber("243290200817664000432902008176640000") + new LargeNumber("4865804016353280008658040163532800000"));
+            Assert.Equal(new LargeNumber("5109094217170944009090942171709440000"),
+                new LargeNumber("243290200817664000432902008176640000") + new LargeNumber("4865804016353280008658040163532800000"));
         }
 
         [Fact]

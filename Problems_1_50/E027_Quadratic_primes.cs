@@ -2,34 +2,31 @@
 
 namespace Exercises
 {
-    public static class E027_Quadratic_primes
+    public class E027_Quadratic_primes
     {
         public static int ProductOfCoefficientOfQuadraticFormulaProducingMorePrimeNumbers()
         {
             var maxPrimeNumbers = int.MinValue;
             int aValue = int.MinValue;
             int bValue = int.MinValue;
+            var primesUntil999 = PrimeNumbers.PrimesUntilN(999);
 
             for (int a = -999; a < 1000; a++)
             {
-                for (int b = -1000; b <= 1000; b++)
+                for (int b = 2; b <= 999; b++)
                 {
-                    var n = 0;
-                    var isPrime = false;
-                    var numPrimeNumbers = 0;
-                    do
+                    if (primesUntil999[b])
                     {
-                        var potentialPrimeNumber = n * n + a * n + b;
-                        isPrime = PrimeNumbers.IsPrimeNumber(potentialPrimeNumber);
-                        if (isPrime) numPrimeNumbers++;
-                        n++;
-                    } while (isPrime);
+                        int n;
 
-                    if (numPrimeNumbers > maxPrimeNumbers)
-                    {
-                        maxPrimeNumbers = numPrimeNumbers;
-                        aValue = a;
-                        bValue = b;
+                        for (n = 1; PrimeNumbers.IsPrimeNumber(n * n + a * n + b); n++) ;
+
+                        if (n > maxPrimeNumbers)
+                        {
+                            maxPrimeNumbers = n;
+                            aValue = a;
+                            bValue = b;
+                        }
                     }
                 }
             }

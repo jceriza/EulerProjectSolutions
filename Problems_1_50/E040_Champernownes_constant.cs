@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Exercises
 {
-    public static class E040_Champernownes_constant
+    public class E040_Champernownes_constant
     {
         private static int NthDigitInNumber(int number, int index, int divideBy)
         {

@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Exercises
 {
-    public static class E028_Number_spiral_diagonals
+    public class E028_Number_spiral_diagonals
     {
         public static int SumDiagonals(int size)
         {

@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Utilities;
+﻿using Utilities;
 
 namespace Exercises
 {
-    public static class E033_Digit_cancelling_fractions
+    public class E033_Digit_cancelling_fractions
     {
         public static int DenominatorProductFractions()
         {
